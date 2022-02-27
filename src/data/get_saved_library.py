@@ -6,6 +6,7 @@ import pandas as pd
 import spotipy.oauth2 as oauth2
 from spotipy.oauth2 import SpotifyClientCredentials
 import bamboolib
+import streamlit as st
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -35,6 +36,7 @@ def connect_to_spotify_api(client_id, client_secret, username, scope, redirect_u
 
 sp = connect_to_spotify_api(client_id, client_secret, username, scope, redirect_uri)
 
+@st.cache(suppress_st_warning=True)
 def get_saved_library():
     
     df_saved_tracks = pd.DataFrame()
@@ -78,5 +80,5 @@ def get_saved_library():
     df_saved_tracks['date_added'] = added_ts_list
     df_saved_tracks['album_cover'] = album_cover_list
     df_saved_tracks['popularity'] = popularity_list
-    
+    df_saved_tracks['date_added'] = df_saved_tracks['date_added'].apply(lambda x: x.split('T')[0])
     return df_saved_tracks
