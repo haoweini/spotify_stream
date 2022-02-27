@@ -35,7 +35,7 @@ def connect_to_spotify_api(client_id, client_secret, username, scope, redirect_u
 
 sp = connect_to_spotify_api(client_id, client_secret, username, scope, redirect_uri)
 
-def get_saved_library(sp):
+def get_saved_library():
     
     df_saved_tracks = pd.DataFrame()
     track_list = ''
