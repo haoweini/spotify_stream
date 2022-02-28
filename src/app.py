@@ -1,6 +1,7 @@
 from dis import dis
 import streamlit as st
 from data.get_saved_library import get_saved_library, display_user_name, display_user_pic
+from data.get_recently_played import get_recently_played
 from data.image_url import path_to_image_html
 from PIL import Image
 import requests
@@ -12,15 +13,25 @@ import streamlit.components.v1 as components
 st.title('Spotify Stream')
 
 # Get Songs from Saved Library
-df = get_saved_library()
+st.text('You just listened these 5 songs')
+df_recent = get_recently_played()
+df_recent = df_recent.head(5)
+df_recent.to_html('../data/interim/recently_webpage.html',escape=False, formatters=dict(album_cover=path_to_image_html))
+HtmlFile = open("../data/interim/recently_webpage.html", 'r', encoding='utf-8')
+source_code = HtmlFile.read() 
+components.html(source_code, height =400, width = 1000)
 
-# Select A Song
+# Get Songs from Saved Library
+df_saved = get_saved_library()
+
+# Select A Song 
 song_title = st.text_input('Select A Song or An Artist From Your Library', 'High On Life')
-df_song = df.loc[(df['song_title'].str.contains(song_title, case=False, regex=False, na=False)) | (df['artists'].str.contains(song_title, case=False, regex=False, na=False))]
+df_song = df_saved.loc[(df_saved['song_title'].str.contains(song_title, case=False, regex=False, na=False)) | (df_saved['artists'].str.contains(song_title, case=False, regex=False, na=False))]
 df_song.to_html('../data/interim/webpage.html',escape=False, formatters=dict(album_cover=path_to_image_html))
 HtmlFile = open("../data/interim/webpage.html", 'r', encoding='utf-8')
 source_code = HtmlFile.read() 
 components.html(source_code, height =3000, width = 1000)
+
 
 # Side Bar
 # Display User
