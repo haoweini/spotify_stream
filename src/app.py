@@ -10,38 +10,53 @@ from io import BytesIO
 from IPython.core.display import HTML
 import streamlit.components.v1 as components
 
+# Set default to wide 
+st.set_page_config(layout="wide")
 # Title at the top of the application 
 st.title('Spotify Stream')
 
+col1, col2 = st.columns(2)
+
 # Get Songs from Recently Played
-st.text('You just listened these 6 songs')
-df_recent = get_recently_played()
-df_recent = df_recent.head(6)
+with col1:
+    st.text('You just listened these 6 songs')
+    df_recent = get_recently_played()
+    df_recent = df_recent.head(6)
 
-track_urls = list(df_recent['url'])
-tracks = []
+    track_urls = list(df_recent['url'])
+    tracks = []
 
-for uri in track_urls:
-    track = """<iframe src="https://open.spotify.com/embed/track/{}" width="460" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>""".format(uri)
-    tracks.append(track)
+    for uri in track_urls:
+        track = """<iframe src="https://open.spotify.com/embed/track/{}" width="460" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>""".format(uri)
+        tracks.append(track)
 
-for track in tracks:
-    components.html(track,height=100, )
+    for track in tracks:
+        components.html(track,height=100, )
 
-# Get Songs from Saved Library
-df_saved = get_saved_library()
-# Select A Song 
-song_title = st.text_input('Select A Song or An Artist From Your Library', 'High On Life')
-df_song = df_saved.loc[(df_saved['song_title'].str.contains(song_title, case=False, regex=False, na=False)) | (df_saved['artists'].str.contains(song_title, case=False, regex=False, na=False))]
-track_urls = list(df_song['url'])
-tracks = []
+    # Get Songs from Saved Library
+    df_saved = get_saved_library()
+    # Select A Song 
+    song_title = st.text_input('Select A Song or An Artist From Your Library', 'High On Life')
+    df_song = df_saved.loc[(df_saved['song_title'].str.contains(song_title, case=False, regex=False, na=False)) | (df_saved['artists'].str.contains(song_title, case=False, regex=False, na=False))]
+    track_urls = list(df_song['url'])
+    tracks = []
 
-for uri in track_urls:
-    track = """<iframe src="https://open.spotify.com/embed/track/{}" width="460" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>""".format(uri)
-    tracks.append(track)
+    for uri in track_urls:
+        track = """<iframe src="https://open.spotify.com/embed/track/{}" width="460" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>""".format(uri)
+        tracks.append(track)
 
-for track in tracks:
-    components.html(track,height=100, )
+    for track in tracks:
+        components.html(track,height=100, )
+
+with col2:
+    st.text('Your Top Artists')
+    df_top_artists = get_top_artists()
+    df_top_artists = df_top_artists.head(5)
+    track_urls = list(df_top_artists['url'])
+    tracks = []
+    for uri in track_urls:
+        track = """<iframe src="https://open.spotify.com/embed/artist/{}" width="460" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>""".format(uri)
+        components.html(track,height=80, )
 
 
 # Side Bar
