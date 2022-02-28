@@ -15,12 +15,11 @@ import streamlit.components.v1 as components
 
 # @st.cache
 def app():
-    st.text('Your Saved Library')
-    df_saved = get_saved_library()
-    # Select A Song 
-    song_title = st.text_input('Select A Song or An Artist From Your Library', 'High On Life')
-    df_song = df_saved.loc[(df_saved['song_title'].str.contains(song_title, case=False, regex=False, na=False)) | (df_saved['artists'].str.contains(song_title, case=False, regex=False, na=False))]
-    track_urls = list(df_song['url'])
+    st.text('You just listened these 6 songs')
+    df_recent = get_recently_played()
+    df_recent = df_recent.head(6)
+
+    track_urls = list(df_recent['url'])
     tracks = []
 
     for uri in track_urls:
