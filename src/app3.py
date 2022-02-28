@@ -17,11 +17,22 @@ app = MultiPage()
 # st.title("Data Storyteller Application")
 #col1, col2 = st.beta_columns(2)
 #col1.image(display, width = 400)
-st.title("Data Storyteller Application")
+
+# Set default to wide 
+st.set_page_config(layout="wide")
+# Title at the top of the application 
+st.title("Spotify Streaming")
+
 
 # Add all your application here
 app.add_page("Explore Your Saved Library", saved_library.app)
 app.add_page("Find Your Top Artists", top_artists.app)
 app.add_page("Recently Played", recently_played.app)
+
 # The main app
 app.run()
+
+# Display Developer
+me = Image.open('../data/raw/me.jpg')
+st.sidebar.image(me,width=100)
+st.sidebar.markdown("  \n  \nDeveloped by [Haowei Ni](https://www.linkedin.com/in/haowei-ni-5b9000114/)")
