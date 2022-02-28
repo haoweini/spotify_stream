@@ -33,6 +33,7 @@ def get_recently_played():
     played_ts_list = []
     artist_list = []
     title_list = []
+    track_url_list = []
     popularity_list = []
     album_cover_list = []
     more_songs = True
@@ -40,20 +41,22 @@ def get_recently_played():
 
     songs = sp.current_user_recently_played(limit=50)
     for song in songs['items']:
-                #join track ids to a string for audio_features function
+        #join track ids to a string for audio_features function
         track_list += song['track']['id'] +','
-                #get the time when the song was added
+        #get the time when the song was added
         played_ts_list.append(song['played_at'])
-                #get the title of the song
+        #get the title of the song
         title_list.append(song['track']['name'])
-                #get popularity
+        #get popularity
         popularity_list.append(song['track']['popularity'])
-                # get album cover
+        # get album cover
         album_cover_url = song['track']['album']['images'][0]['url']
-                #response = requests.get(album_cover_url)
-                #img = Image.open(BytesIO(response.content))
         album_cover_list.append(album_cover_url)
-                #get all the artists in the song
+        # get track list
+        track_url = song['track']['external_urls']['spotify']
+        track_url = track_url.split('/')[-1]
+        track_url_list.append(track_url)
+        #get all the artists in the song
         artists = song['track']['artists']
         artists_name = ''
         for artist in artists:
@@ -66,5 +69,6 @@ def get_recently_played():
     df_saved_tracks['played_at'] = played_ts_list
     df_saved_tracks['album_cover'] = album_cover_list
     df_saved_tracks['popularity'] = popularity_list
+    df_saved_tracks['url'] = track_url_list
     
     return df_saved_tracks
