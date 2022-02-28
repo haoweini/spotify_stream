@@ -7,6 +7,7 @@ import spotipy.oauth2 as oauth2
 from spotipy.oauth2 import SpotifyClientCredentials
 import bamboolib
 import streamlit as st
+import requests
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -17,8 +18,8 @@ with open('../data/raw/spotify_creds.json') as f:
 client_id = spotify_creds['client_id']
 client_secret = spotify_creds['client_secret']
 username = spotify_creds['username']
-scope = spotify_creds['scope']
-redirect_uri = spotify_creds['redirect_url']
+scope = spotify_creds['saved_library_scope']
+redirect_uri = spotify_creds['saved_library_redirect_url']
 
 def connect_to_spotify_api(client_id, client_secret, username, scope, redirect_uri):
     
@@ -35,6 +36,18 @@ def connect_to_spotify_api(client_id, client_secret, username, scope, redirect_u
     return sp
 
 sp = connect_to_spotify_api(client_id, client_secret, username, scope, redirect_uri)
+
+def display_user_name():
+    user = sp.current_user()
+    user_name = user['display_name']
+    return user_name
+
+def display_user_pic():
+    user = sp.current_user()
+    pic_url = user['images'][0]['url']
+    with open('../data/interim/user_pic.jpg', 'wb') as f:
+        f.write(requests.get(pic_url).content)
+    return pic_url
 
 @st.cache(suppress_st_warning=True)
 def get_saved_library():
