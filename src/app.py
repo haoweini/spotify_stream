@@ -14,34 +14,34 @@ import streamlit.components.v1 as components
 st.title('Spotify Stream')
 
 # Get Songs from Recently Played
-st.text('You just listened these 5 songs')
+st.text('You just listened these 6 songs')
 df_recent = get_recently_played()
-df_recent = df_recent.head(5)
-df_recent.to_html('../data/interim/recently_webpage.html',escape=False, formatters=dict(album_cover=path_to_image_html))
-HtmlFile = open("../data/interim/recently_webpage.html", 'r', encoding='utf-8')
-source_code = HtmlFile.read() 
-components.html(source_code, height =400, width = 1000)
+df_recent = df_recent.head(6)
 
-# Get Artists from Top Artists
-st.text('Your Top 5 Artists')
-df_top_artists = get_top_artists()
-df_top_artists = df_top_artists.head(5)
-df_top_artists.to_html('../data/interim/top_artists_webpage.html',escape=False, formatters=dict(artist=path_to_image_html))
-HtmlFile = open("../data/interim/top_artists_webpage.html", 'r', encoding='utf-8')
-source_code = HtmlFile.read() 
-components.html(source_code, height =400, width = 1000)
+track_urls = list(df_recent['url'])
+tracks = []
 
+for uri in track_urls:
+    track = """<iframe src="https://open.spotify.com/embed/track/{}" width="460" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>""".format(uri)
+    tracks.append(track)
+
+for track in tracks:
+    components.html(track,height=100, )
 
 # Get Songs from Saved Library
 df_saved = get_saved_library()
-
 # Select A Song 
 song_title = st.text_input('Select A Song or An Artist From Your Library', 'High On Life')
 df_song = df_saved.loc[(df_saved['song_title'].str.contains(song_title, case=False, regex=False, na=False)) | (df_saved['artists'].str.contains(song_title, case=False, regex=False, na=False))]
-df_song.to_html('../data/interim/webpage.html',escape=False, formatters=dict(album_cover=path_to_image_html))
-HtmlFile = open("../data/interim/webpage.html", 'r', encoding='utf-8')
-source_code = HtmlFile.read() 
-components.html(source_code, height =3000, width = 1000)
+track_urls = list(df_song['url'])
+tracks = []
+
+for uri in track_urls:
+    track = """<iframe src="https://open.spotify.com/embed/track/{}" width="460" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>""".format(uri)
+    tracks.append(track)
+
+for track in tracks:
+    components.html(track,height=100, )
 
 
 # Side Bar

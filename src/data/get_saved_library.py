@@ -59,6 +59,7 @@ def get_saved_library():
     title_list = []
     popularity_list = []
     album_cover_list = []
+    track_url_list = []
     more_songs = True
     offset_index = 0
 
@@ -74,6 +75,10 @@ def get_saved_library():
             #get popularity
             popularity_list.append(song['track']['popularity'])
             album_cover_list.append(song['track']['album']['images'][0]['url'])
+            # get track list
+            track_url = song['track']['external_urls']['spotify']
+            track_url = track_url.split('/')[-1]
+            track_url_list.append(track_url)
             #get all the artists in the song
             artists = song['track']['artists']
             artists_name = ''
@@ -94,4 +99,6 @@ def get_saved_library():
     df_saved_tracks['album_cover'] = album_cover_list
     df_saved_tracks['popularity'] = popularity_list
     df_saved_tracks['date_added'] = df_saved_tracks['date_added'].apply(lambda x: x.split('T')[0])
+    df_saved_tracks['url'] = track_url_list
+    
     return df_saved_tracks
