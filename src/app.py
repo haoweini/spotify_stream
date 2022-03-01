@@ -1,72 +1,38 @@
-from dis import dis
+import os
 import streamlit as st
-from data.get_saved_library import get_saved_library, display_user_name, display_user_pic
-from data.get_recently_played import get_recently_played
-from data.get_top_artists import get_top_artists
-from data.image_url import path_to_image_html
-from PIL import Image
-import requests
-from io import BytesIO
-from IPython.core.display import HTML
-import streamlit.components.v1 as components
+import numpy as np
+from PIL import  Image
+
+# Custom imports 
+from multipage import MultiPage
+#from pages import data_upload, machine_learning, metadata, data_visualize, redundant # import your pages here
+from pages import saved_library, top_artists, recently_played, welcome
+
+# Create an instance of the app 
+app = MultiPage()
+
+# Title of the main page
+#display = Image.open('Logo.png')
+#display = np.array(display)
+# st.image(display, width = 400)
+# st.title("Data Storyteller Application")
+#col1, col2 = st.beta_columns(2)
+#col1.image(display, width = 400)
 
 # Set default to wide 
 st.set_page_config(layout="wide")
 # Title at the top of the application 
-st.title('Spotify Stream')
-
-col1, col2 = st.columns(2)
-
-# Get Songs from Recently Played
-with col1:
-    st.text('You just listened these 6 songs')
-    df_recent = get_recently_played()
-    df_recent = df_recent.head(6)
-
-    track_urls = list(df_recent['url'])
-    tracks = []
-
-    for uri in track_urls:
-        track = """<iframe src="https://open.spotify.com/embed/track/{}" width="460" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>""".format(uri)
-        tracks.append(track)
-
-    for track in tracks:
-        components.html(track,height=100, )
-
-    # Get Songs from Saved Library
-    df_saved = get_saved_library()
-    # Select A Song 
-    song_title = st.text_input('Select A Song or An Artist From Your Library', 'High On Life')
-    df_song = df_saved.loc[(df_saved['song_title'].str.contains(song_title, case=False, regex=False, na=False)) | (df_saved['artists'].str.contains(song_title, case=False, regex=False, na=False))]
-    track_urls = list(df_song['url'])
-    tracks = []
-
-    for uri in track_urls:
-        track = """<iframe src="https://open.spotify.com/embed/track/{}" width="460" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>""".format(uri)
-        tracks.append(track)
-
-    for track in tracks:
-        components.html(track,height=100, )
-
-with col2:
-    st.text('Your Top Artists')
-    df_top_artists = get_top_artists()
-    df_top_artists = df_top_artists.head(5)
-    track_urls = list(df_top_artists['url'])
-    tracks = []
-    for uri in track_urls:
-        track = """<iframe src="https://open.spotify.com/embed/artist/{}" width="460" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>""".format(uri)
-        components.html(track,height=80, )
+st.title("Spotify Streaming")
 
 
-# Side Bar
-# Display User
-username = display_user_name()
-pic_url = display_user_pic()
-user_pic = Image.open('../data/interim/user_pic.jpg')
-st.sidebar.text("Welcome %s !" % (username))
-st.sidebar.image(user_pic, width=100)
+# Add all your application here
+app.add_page("Main Page", welcome.app)
+app.add_page("Explore Your Saved Library", saved_library.app)
+app.add_page("Find Your Top Artists", top_artists.app)
+app.add_page("Recently Played", recently_played.app)
 
+# The main app
+app.run()
 
 # Display Developer
 me = Image.open('../data/raw/me.jpg')
