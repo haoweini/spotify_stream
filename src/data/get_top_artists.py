@@ -51,3 +51,40 @@ def get_top_artists():
     df_top_artists['url'] = artist_url_list
 
     return df_top_artists
+
+def get_top_tracks():
+
+    df_saved_tracks = pd.DataFrame()
+    track_list = ''
+    artist_list = []
+    title_list = []
+    track_url_list = []
+    popularity_list = []
+
+    songs = sp.current_user_top_tracks(limit=50)
+    for song in songs['items']:
+        #join track ids to a string for audio_features function
+        track_list += song['id'] +','
+        
+        #get the title of the song
+        title_list.append(song['name'])
+        #get popularity
+        popularity_list.append(song['popularity'])
+        # get track list
+        track_url = song['external_urls']['spotify']
+        track_url = track_url.split('/')[-1]
+        track_url_list.append(track_url)
+        #get all the artists in the song
+        artists = song['artists']
+        artists_name = ''
+        for artist in artists:
+            artists_name += artist['name']  + ','
+        artist_list.append(artists_name[:-1])
+        track_list = ''
+        #include timestamp added, title and artists of a song
+    df_saved_tracks['song_title'] = title_list
+    df_saved_tracks['artists'] = artist_list
+    df_saved_tracks['popularity'] = popularity_list
+    df_saved_tracks['url'] = track_url_list
+    
+    return df_saved_tracks

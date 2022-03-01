@@ -4,8 +4,7 @@ import pandas as pd
 from dis import dis
 import streamlit as st
 from data.get_saved_library import get_saved_library, display_user_name, display_user_pic
-from data.get_recently_played import get_recently_played
-from data.get_top_artists import get_top_artists
+from data.get_top_artists import get_top_artists, get_top_tracks
 from data.image_url import path_to_image_html
 from PIL import Image
 import requests
@@ -15,8 +14,20 @@ import streamlit.components.v1 as components
 
 # @st.cache
 def app():
-    username = display_user_name()
-    pic_url = display_user_pic()
-    user_pic = Image.open('../data/interim/user_pic.jpg')
-    st.sidebar.text("Welcome %s !" % (username))
-    st.sidebar.image(user_pic, width=100)
+    col1, col2 = st.columns(2)
+    with col1:
+        username = display_user_name()
+        pic_url = display_user_pic()
+        user_pic = Image.open('../data/interim/user_pic.jpg')
+        st.text("Welcome %s !" % (username))
+        st.image(user_pic, width=500)
+    
+    with col2:
+        st.text('These Are Your Top 5 Tracks')
+        df_top_tracks = get_top_tracks()
+        df_top_tracks = df_top_tracks.head(5)
+        track_urls = list(df_top_tracks['url'])
+
+        for uri in track_urls:
+            track = """<iframe src="https://open.spotify.com/embed/track/{}" width="460" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>""".format(uri)
+            components.html(track,height=100, )
