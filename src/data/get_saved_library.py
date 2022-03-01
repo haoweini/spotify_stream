@@ -21,12 +21,14 @@ username = spotify_creds['username']
 scope = spotify_creds['saved_library_scope']
 redirect_uri = spotify_creds['saved_library_redirect_url']
 
-def connect_to_spotify_api(client_id, client_secret, username, scope, redirect_uri):
+def connect_to_spotify_api(client_id, client_secret, username, scope, redirect_uri, which_token):
     
     client_credentials_manager = SpotifyClientCredentials(client_id, client_secret) 
     sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
-    token = util.prompt_for_user_token(username, scope, client_id, client_secret, redirect_uri)
+    #token = util.prompt_for_user_token(username, scope, client_id, client_secret, redirect_uri)
+    str1 = "%s_token" % (which_token)
+    token = spotify_creds[str1]
 
     if token:
         sp = spotipy.Spotify(auth=token)
@@ -35,7 +37,7 @@ def connect_to_spotify_api(client_id, client_secret, username, scope, redirect_u
         
     return sp
 
-sp = connect_to_spotify_api(client_id, client_secret, username, scope, redirect_uri)
+sp = connect_to_spotify_api(client_id, client_secret, username, scope, redirect_uri, 'saved_library')
 
 def display_user_name():
     user = sp.current_user()
@@ -45,7 +47,7 @@ def display_user_name():
 def display_user_pic():
     user = sp.current_user()
     pic_url = user['images'][0]['url']
-    with open('../data/interim/user_pic.jpg', 'wb') as f:
+    with open('../data/raw/user_pic.jpg', 'wb') as f:
         f.write(requests.get(pic_url).content)
     return pic_url
 

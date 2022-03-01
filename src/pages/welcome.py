@@ -18,7 +18,7 @@ def app():
     with col1:
         username = display_user_name()
         pic_url = display_user_pic()
-        user_pic = Image.open('../data/interim/user_pic.jpg')
+        user_pic = Image.open('../data/raw/user_pic.jpg')
         st.text("Welcome %s !" % (username))
         st.image(user_pic, width=500)
     

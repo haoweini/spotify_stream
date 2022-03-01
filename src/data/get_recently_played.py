@@ -23,7 +23,7 @@ scope = spotify_creds['recently_played_scope']
 redirect_uri = spotify_creds['recently_played_redirect_url']
 
 
-sp = connect_to_spotify_api(client_id, client_secret, username, scope, redirect_uri)
+sp = connect_to_spotify_api(client_id, client_secret, username, scope, redirect_uri, 'recently_played')
 
 
 def get_recently_played():

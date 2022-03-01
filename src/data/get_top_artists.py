@@ -23,7 +23,7 @@ scope = spotify_creds['top_artist_scope']
 redirect_uri = spotify_creds['top_artist_redirect_url']
 
 
-sp = connect_to_spotify_api(client_id, client_secret, username, scope, redirect_uri)
+sp = connect_to_spotify_api(client_id, client_secret, username, scope, redirect_uri, 'top_artist')
 
 def get_top_artists():
     df_top_artists = pd.DataFrame()

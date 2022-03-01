@@ -6,6 +6,8 @@ COPY requirements.txt /app
 RUN mkdir -p /app/data/raw
 
 COPY data/raw/spotify_creds.json /app/data/raw
+COPY data/raw/me.jpg /app/data/raw
+COPY data/raw/user_pic.jpg /app/data/raw
 
 # Make base or working directory 
 WORKDIR /app
@@ -17,4 +19,4 @@ WORKDIR /app/src
 
 # Google cloud app engine by default run on port 8080
 # --server.enableCORS false is for google cloud
-CMD streamlit run app3.py --server.port 8503
+CMD streamlit run app.py --server.port 8503
