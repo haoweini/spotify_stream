@@ -20,15 +20,18 @@ def app():
     df_top_artists = df_top_artists.head(5)
     track_urls = list(df_top_artists['url'])
     
-    col1, col2 = st.columns(2)
-    with col1:
-        for artist in df_top_artists['name'].unique():
+
+    for artist in df_top_artists['name'].unique():
+        col1, col2,= st.columns(2)
+        with col1:
             df = df_top_artists[df_top_artists['name'] == artist]
             uri = list(df['url'])[0]
             track = """<iframe src="https://open.spotify.com/embed/artist/{}" width="460" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>""".format(uri)
             components.html(track,height=380, )
             followers = list(df['followers'])[0]
+            followers = (f"{followers:,}")
             popularity = list(df['popularity'])[0]
+        with col2:
             with st.expander("See more details"):
                 st.metric("Followers", followers)
                 st.metric("Popularity", popularity)
