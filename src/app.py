@@ -2,7 +2,6 @@ import os
 import streamlit as st
 import numpy as np
 from PIL import  Image
-
 # Custom imports 
 from multipage import MultiPage
 #from pages import data_upload, machine_learning, metadata, data_visualize, redundant # import your pages here
@@ -23,6 +22,7 @@ app = MultiPage()
 st.set_page_config(layout="wide")
 # Title at the top of the application 
 st.title("Spotify Streaming")
+
 
 
 # Add all your application here
