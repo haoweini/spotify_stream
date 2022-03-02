@@ -19,4 +19,5 @@ WORKDIR /app/src
 
 # Google cloud app engine by default run on port 8080
 # --server.enableCORS false is for google cloud
-CMD streamlit run --server.port 8080 --server.enableCORS false  --server.enableXsrfProtection false app.py
+CMD python get_token.py
+#CMD streamlit run --server.port 8080 --server.enableCORS false  --server.enableXsrfProtection false app.py
