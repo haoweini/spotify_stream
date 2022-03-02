@@ -15,11 +15,20 @@ username = spotify_creds['username']
 redirect_uri = spotify_creds['top_artist_redirect_url']
 
 def get_token(scope):
+    
     client_credentials_manager = SpotifyClientCredentials(client_id, client_secret) 
     sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
     token = util.prompt_for_user_token(username, scope, client_id, client_secret, redirect_uri)
+    
     return token
 
-token = get_token('user-read-recently-played')
+def save_token():
+    all_token = get_token('user-library-read user-read-recently-played user-top-read ')
+    #recently_played_token = get_token('user-read-recently-played')
+    #top_artist_token = get_token('user-top-read')
+    
+    with open(r"../data/raw/spotify_tokens.json",
+        "w") as fp:
+        json.dump({"all_access_token": all_token}, fp)
 
-print(token)
+save_token()
