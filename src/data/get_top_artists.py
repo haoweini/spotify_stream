@@ -32,6 +32,7 @@ def get_top_artists():
     artists_pic_list = []
     popularity_list = []
     artist_url_list = []
+    followers_list = []
     artists = sp.current_user_top_artists()
     
     for artist in artists['items']:
@@ -39,6 +40,7 @@ def get_top_artists():
         artists_list.append(artist['name'])
         genres_list.append(artist['genres'][0])
         popularity_list.append(artist['popularity'])
+        followers_list.append(artist['followers']['total'])
         artist_url = artist['external_urls']['spotify']
         artist_url = artist_url.split('/')[-1]
         artist_url_list.append(artist_url)
@@ -48,6 +50,7 @@ def get_top_artists():
     df_top_artists['name'] = artists_list
     df_top_artists['genere'] = genres_list
     df_top_artists['popularity'] = popularity_list
+    df_top_artists['followers'] = followers_list
     df_top_artists['url'] = artist_url_list
 
     return df_top_artists
