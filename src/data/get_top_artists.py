@@ -91,3 +91,40 @@ def get_top_tracks():
     df_saved_tracks['url'] = track_url_list
     
     return df_saved_tracks
+
+
+def get_related_artists(artist_name):
+    
+    df_related_artists = pd.DataFrame()
+    artists_list = []
+    genres_list = []
+    artists_pic_list = []
+    popularity_list = []
+    artist_url_list = []
+    followers_list = []
+    
+    artist_id = sp.search(artist_name)
+    artist_url = artist_id['tracks']['items'][0]['artists'][0]['external_urls']['spotify']
+    artist_url = artist_url.split('/')[-1]
+    
+    artists = sp.artist_related_artists(artist_url)
+    
+    for artist in artists['artists']:
+        artists_list.append(artist['name'])
+        #genres_list.append(artist['genres'][0])
+        popularity_list.append(artist['popularity'])
+        followers_list.append(artist['followers']['total'])
+        artist_url = artist['external_urls']['spotify']
+        artist_url = artist_url.split('/')[-1]
+        artist_url_list.append(artist_url)
+
+        
+    
+    df_related_artists['name'] = artists_list
+    #df_related_artists['genere'] = genres_list
+    df_related_artists['popularity'] = popularity_list
+    df_related_artists['followers'] = followers_list
+    df_related_artists['url'] = artist_url_list
+    df_related_artists = df_related_artists.sort_values(by=['popularity','followers'], ascending=[False,False])
+    
+    return df_related_artists

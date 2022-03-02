@@ -23,7 +23,7 @@ def get_token(scope):
     return token
 
 def save_token():
-    all_token = get_token('user-library-read user-read-recently-played user-top-read ')
+    all_token = get_token('user-library-read user-read-recently-played user-top-read')
     #recently_played_token = get_token('user-read-recently-played')
     #top_artist_token = get_token('user-top-read')
     
