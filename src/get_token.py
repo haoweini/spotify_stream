@@ -27,7 +27,7 @@ def save_token():
     #recently_played_token = get_token('user-read-recently-played')
     #top_artist_token = get_token('user-top-read')
     
-    with open(r"../data/raw/spotify_tokens.json",
+    with open(r"../data/raw/spotify_token.json",
         "w") as fp:
         json.dump({"all_access_token": all_token}, fp)
 
