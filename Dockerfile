@@ -6,6 +6,7 @@ COPY requirements.txt /app
 RUN mkdir -p /app/data/raw
 
 COPY data/raw/spotify_creds.json /app/data/raw
+COPY data/raw/spotify_token.json /app/data/raw
 COPY data/raw/me.jpg /app/data/raw
 COPY data/raw/user_pic.jpg /app/data/raw
 
@@ -19,5 +20,6 @@ WORKDIR /app/src
 
 # Google cloud app engine by default run on port 8080
 # --server.enableCORS false is for google cloud
-CMD python get_token.py
-#CMD streamlit run --server.port 8080 --server.enableCORS false  --server.enableXsrfProtection false app.py
+
+CMD python get_token.py 
+CMD streamlit run --server.port 8080 --server.enableCORS false  --server.enableXsrfProtection false app.py
