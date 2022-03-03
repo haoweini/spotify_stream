@@ -5,7 +5,7 @@ from PIL import  Image
 # Custom imports 
 from multipage import MultiPage
 #from pages import data_upload, machine_learning, metadata, data_visualize, redundant # import your pages here
-from pages import saved_library, top_artists, recently_played, welcome
+from pages import saved_library, artists_main, recently_played, welcome
 
 # Create an instance of the app 
 app = MultiPage()
@@ -28,7 +28,7 @@ st.title("Spotify Streaming")
 # Add all your application here
 app.add_page("Main Page", welcome.app)
 app.add_page("Explore Your Saved Library", saved_library.app)
-app.add_page("Find Your Top Artists", top_artists.app)
+app.add_page("Find Your Top Artists", artists_main.app)
 app.add_page("Recently Played", recently_played.app)
 
 # The main app

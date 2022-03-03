@@ -14,14 +14,14 @@ from io import BytesIO
 from IPython.core.display import HTML
 import streamlit.components.v1 as components
 import plotly.express as px
+from pages import welcome
 
 # @st.cache
 def app():
-    st.text('Your Top Artists')
+
+    #track_urls = list(df_top_artists['url'])
     df_top_artists = get_top_artists()
     df_top_artists = df_top_artists.head(5)
-    track_urls = list(df_top_artists['url'])
-    
 
     for artist in df_top_artists['name'].unique():
         col1, col2, col3 = st.columns([1,0.5,1])
@@ -43,7 +43,6 @@ def app():
                     components.html(track,height=100, )   
 
             ## Input a random artists
-    
 
         with col2:
             st.metric("Followers", followers)
