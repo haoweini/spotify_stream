@@ -42,8 +42,6 @@ def app():
                     track = """<iframe src="https://open.spotify.com/embed/artist/{}" width="380" height="100" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>""".format(uri)
                     components.html(track,height=100, )   
 
-            ## Input a random artists
-
         with col2:
             st.metric("Followers", followers)
             st.metric("Popularity", popularity)
