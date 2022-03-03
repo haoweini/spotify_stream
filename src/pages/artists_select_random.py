@@ -8,6 +8,7 @@ from data.get_saved_library import get_saved_library, display_user_name, display
 from data.get_recently_played import get_recently_played
 from data.get_top_artists import get_top_artists, get_related_artists, get_top_artists_tracks_features, NormalizeData, draw_feature_plot, search_random_artist
 from data.image_url import path_to_image_html
+from data.album_tracks import search_artist_album, find_album_tracks, find_all_tracks_features
 from PIL import Image
 import requests
 from io import BytesIO
@@ -26,7 +27,12 @@ def app():
         track = """<iframe src="https://open.spotify.com/embed/artist/{}" width="490" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>""".format(uri)
         components.html(track,height=380, width=500)
 
-        with st.expander("Explore More Artists "):
+        with st.expander("Explore Artists Track History"):
+            df_album = search_artist_album(artist)
+            df_all_track_features = find_all_tracks_features(df_album,artist)
+            st.table(df_all_track_features.head(5))
+
+        with st.expander("Explore More Artists Similar To Your Pick"):
             df_related_artists = get_related_artists(artist)
             df_related_artists = df_related_artists.head(5)
             for related_artist in df_related_artists['name'].unique():
