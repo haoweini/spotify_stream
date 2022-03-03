@@ -9,6 +9,8 @@ import bamboolib
 import streamlit as st
 import requests
 from data.get_saved_library import  connect_to_spotify_api 
+import numpy as np
+import plotly.express as px
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -25,6 +27,7 @@ redirect_uri = spotify_creds['top_artist_redirect_url']
 
 sp = connect_to_spotify_api(client_id, client_secret, username, scope, redirect_uri)
 
+#####
 def get_top_artists():
     df_top_artists = pd.DataFrame()
     artists_list = []
@@ -55,6 +58,7 @@ def get_top_artists():
 
     return df_top_artists
 
+#####
 def get_top_tracks():
 
     df_saved_tracks = pd.DataFrame()
@@ -92,7 +96,7 @@ def get_top_tracks():
     
     return df_saved_tracks
 
-
+####
 def get_related_artists(artist_name):
     
     df_related_artists = pd.DataFrame()
@@ -128,3 +132,47 @@ def get_related_artists(artist_name):
     df_related_artists = df_related_artists.sort_values(by=['popularity','followers'], ascending=[False,False])
     
     return df_related_artists
+
+#####3
+def get_top_artists_tracks_features(artist_name):
+    
+    artist_id = sp.search(artist_name)
+    artist_url = artist_id['tracks']['items'][0]['artists'][0]['external_urls']['spotify']
+    artist_url = artist_url.split('/')[-1]
+    songs = sp.artist_top_tracks(artist_url)
+    
+    df_artist_top_tracks = pd.DataFrame()
+    track_name = []
+
+    for song in songs['tracks']:
+        #join track ids to a string for audio_features function
+        track_name.append(song['name'])
+        track_url = song['external_urls']['spotify'].split('/')[-1]
+        track_features = sp.audio_features(track_url)
+        df_temp = pd.DataFrame(track_features)
+        df_artist_top_tracks = df_artist_top_tracks.append(df_temp)
+        
+    df_artist_top_tracks['track'] = track_name
+    df_artist_top_tracks['artist'] = artist_name
+    df_artist_top_tracks = df_artist_top_tracks[['artist','track', 'acousticness', 'danceability', 'energy', 'speechiness', 'valence', 'tempo']]
+    df_artist_top_tracks = df_artist_top_tracks.rename(columns={'tempo': 'BPM'})
+    
+    return df_artist_top_tracks
+
+
+####3
+def NormalizeData(data):
+    return (data - np.min(data)) / (np.max(data) - np.min(data))
+
+def draw_feature_plot(df):
+    
+    df[['BPM']] = NormalizeData(df[['BPM']])
+
+    df = df.groupby(['artist'])['track', 'acousticness', 'danceability', 'energy', 'speechiness', 'valence', 'BPM'].mean().reset_index()
+    df = df[['acousticness', 'danceability', 'energy', 'speechiness', 'valence', 'BPM']]
+
+    fig = px.line_polar(df, r=df.loc[0].values, theta=df.columns, range_r = [0,1.0], line_close=True)
+    fig.update_layout(height=500, width=500)
+    fig.update_traces(fill='toself')
+    
+    return fig
