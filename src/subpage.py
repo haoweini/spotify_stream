@@ -32,7 +32,7 @@ class SubPage:
     def run(self):
         # Drodown to select the page to run  
         page = st.selectbox(
-            'App Navigation', 
+            'Navigation', 
             self.pages, 
             format_func=lambda page: page['title']
         )

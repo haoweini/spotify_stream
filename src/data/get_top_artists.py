@@ -136,8 +136,8 @@ def get_related_artists(artist_name):
 #####3
 def get_top_artists_tracks_features(artist_name):
     
-    artist_id = sp.search(artist_name)
-    artist_url = artist_id['tracks']['items'][0]['artists'][0]['external_urls']['spotify']
+    artist_id = sp.search(q=artist_name, type="artist", limit=10)
+    artist_url = artist_id['artists']['items'][0]['external_urls']['spotify']
     artist_url = artist_url.split('/')[-1]
     songs = sp.artist_top_tracks(artist_url)
     
@@ -176,3 +176,24 @@ def draw_feature_plot(df):
     fig.update_traces(fill='toself')
     
     return fig
+
+###
+def search_random_artist(artist):
+    
+    df_artist = pd.DataFrame()
+    followers = []
+    popularity = []
+    
+    artist_id = sp.search(q=artist, type="artist", limit=10)
+    artist_url = artist_id['artists']['items'][0]['external_urls']['spotify']
+    artist_url = artist_url.split('/')[-1]
+    artist_info = sp.artist(artist_url)
+    
+    followers.append(artist_info['followers']['total'])
+    popularity.append(artist_info['popularity'])
+    
+    df_artist['followers'] = followers
+    df_artist['url'] = artist_url
+    df_artist['popularity'] = popularity
+    
+    return df_artist

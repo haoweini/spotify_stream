@@ -28,8 +28,8 @@ def app():
         with col1:
             df = df_top_artists[df_top_artists['name'] == artist]
             uri = list(df['url'])[0]
-            track = """<iframe src="https://open.spotify.com/embed/artist/{}" width="410" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>""".format(uri)
-            components.html(track,height=380, width=420)
+            track = """<iframe src="https://open.spotify.com/embed/artist/{}" width="490" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>""".format(uri)
+            components.html(track,height=400, width=500)
             followers = list(df['followers'])[0]
             followers = (f"{followers:,}")
             popularity = list(df['popularity'])[0]
