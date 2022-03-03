@@ -14,18 +14,14 @@ from io import BytesIO
 from IPython.core.display import HTML
 import streamlit.components.v1 as components
 import plotly.express as px
-from subpage import SubPage
-from pages import welcome, artists_top_saved, artists_select_random
 
 # @st.cache
 def app():
-
-    app_sub = SubPage()
-    app_sub.add_page("Select An Artist", artists_select_random.app)
-    app_sub.add_page("Your Top Artists", artists_top_saved.app)
-    app_sub.run()
-
-    #track_urls = list(df_top_artists['url'])
-    
-
-    
+    artist = st.text_input('Choose An Artist', 'KSHMR')
+    df_related_artists = get_related_artists(artist)
+    df_related_artists = df_related_artists.head(5)
+    for related_artist in df_related_artists['name'].unique():
+        df = df_related_artists[df_related_artists['name'] == related_artist]
+        uri = list(df['url'])[0]
+        track = """<iframe src="https://open.spotify.com/embed/artist/{}" width="380" height="100" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>""".format(uri)
+        components.html(track,height=100, )
