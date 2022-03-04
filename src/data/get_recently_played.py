@@ -19,7 +19,7 @@ with open('../data/raw/spotify_creds.json') as f:
 client_id = spotify_creds['client_id']
 client_secret = spotify_creds['client_secret']
 username = spotify_creds['username']
-scope = spotify_creds['recently_played_scope']
+scope = 'user-library-read user-read-recently-played user-top-read'
 redirect_uri = spotify_creds['recently_played_redirect_url']
 
 

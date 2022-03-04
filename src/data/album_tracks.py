@@ -16,15 +16,12 @@ warnings.filterwarnings("ignore")
 with open('../data/raw/spotify_creds.json') as f:
     spotify_creds = json.load(f)
 
-with open('../data/raw/spotify_token.json') as f:
-    spotify_token = json.load(f)
-
 client_id = spotify_creds['client_id']
 client_secret = spotify_creds['client_secret']
 username = spotify_creds['username']
-scope = spotify_creds['saved_library_scope']
+scope = 'user-library-read user-read-recently-played user-top-read'
 redirect_uri = spotify_creds['saved_library_redirect_url']
-token = spotify_token['all_access_token']
+#token = spotify_token['all_access_token']
 
 sp = connect_to_spotify_api(client_id, client_secret, username, scope, redirect_uri)
 
