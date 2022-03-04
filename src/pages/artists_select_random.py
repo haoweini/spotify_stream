@@ -11,8 +11,6 @@ from data.image_url import path_to_image_html
 from data.album_tracks import search_artist_album, find_album_tracks, find_all_tracks_features, groupby_df
 from PIL import Image
 import requests
-from io import BytesIO
-from IPython.core.display import HTML
 import streamlit.components.v1 as components
 import plotly.express as px
 from plotly.subplots import make_subplots
@@ -47,7 +45,7 @@ def app():
         with col3:
                 df_top_track_features = get_top_artists_tracks_features(artist)
                 fig = draw_feature_plot(df_top_track_features)
-                st.plotly_chart(fig, width=500)
+                st.plotly_chart(fig, width=500, use_container_width=True)
     
     with st.container():
         
@@ -76,7 +74,7 @@ def app():
         fig['layout'].update(height = 600, width = 1200,xaxis=dict(
         ))
         fig.update_layout(height=500, width=1300)
-        st.plotly_chart(fig, width=1300)
+        st.plotly_chart(fig, width=1300, use_container_width=True)
 
         options = st.multiselect(
         'Choose Metrics To Explore',
@@ -85,4 +83,4 @@ def app():
 
         fig = px.line(df_all_track_features.sort_values(by=['release date'], ascending=[True]), x='release date', y=options)
         fig.update_layout(height=500, width=1300)
-        st.plotly_chart(fig, width=1300)
+        st.plotly_chart(fig, width=1300, use_container_width=True)

@@ -62,7 +62,7 @@ def app():
                     components.html(track,height=400, )
                 with col2:
                     fig = draw_feature_plot(df)
-                    st.plotly_chart(fig, width=250)
+                    st.plotly_chart(fig, width=250, use_container_width=True)
         else:
             col1, col2= st.columns(2)
             track_urls = list(df_song['url'])[0]
@@ -71,7 +71,7 @@ def app():
                 components.html(track,height=400, )
             with col2:
                 fig = draw_feature_plot(df_song)
-                st.plotly_chart(fig, width=250)
+                st.plotly_chart(fig, width=250, use_container_width=True)
 
 
 
@@ -102,7 +102,7 @@ def app():
                     components.html(track,height=400, )
                 with col2:
                     fig = draw_feature_plot(df)
-                    st.plotly_chart(fig, width=250)
+                    st.plotly_chart(fig, width=250, use_container_width=True)
     
     with st.container():
         with st.expander("Your Streaming History"): 
@@ -128,7 +128,7 @@ def app():
             fig['layout'].update(height = 600, width = 1200,xaxis=dict(
             ))
             fig.update_layout(height=500, width=1300)
-            st.plotly_chart(fig, width=1300)
+            st.plotly_chart(fig, width=1300, use_container_width=True)
 
             options = st.multiselect(
             'Choose Metrics To Explore',
@@ -137,7 +137,7 @@ def app():
 
             fig = px.line(df_group.sort_values(by=['date_added'], ascending=[True]), x='date_added', y=options)
             fig.update_layout(height=500, width=1300)
-            st.plotly_chart(fig, width=1300)
+            st.plotly_chart(fig, width=1300, use_container_width=True)
 
 
     

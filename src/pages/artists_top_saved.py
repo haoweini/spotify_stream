@@ -48,5 +48,5 @@ def app():
         with col3:
             df_top_track_features = get_top_artists_tracks_features(artist)
             fig = draw_feature_plot(df_top_track_features)
-            st.plotly_chart(fig, width=500)
+            st.plotly_chart(fig, width=500, use_container_width=True)
     
