@@ -8,6 +8,7 @@ from spotipy.oauth2 import SpotifyClientCredentials
 import bamboolib
 import numpy as np
 from data.get_saved_library import  connect_to_spotify_api 
+import streamlit as st
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -101,6 +102,7 @@ def find_album_tracks(album_url):
     
     return df_album_tracks
 
+@st.cache(suppress_st_warning=True, allow_output_mutation=True)
 def find_all_tracks_features(album, artist_NAME):
     df_all_tracks = []
 
@@ -123,14 +125,19 @@ def find_all_tracks_features(album, artist_NAME):
         album_name = df_all_tracks.iloc[i]['ablum']
         #Audio Features
         track_features = sp.audio_features(track_url)
+        popularity = sp.track(track_url)['popularity']
         df_track = df_all_tracks[df_all_tracks['url'] == track_url]
         df_temp = pd.DataFrame(track_features)
         df_temp = df_temp[['acousticness', 'danceability', 'energy', 'speechiness', 'valence', 'tempo']]
         df_temp = df_temp.rename(columns={'tempo': 'BPM'})
+        # Normalize BPM
+        #df_temp[['BPM']] = NormalizeData(df_temp[['BPM']])
+        
         df_temp['track'] = track_name
         df_temp['album'] = album_name
         df_temp['release date'] = track_date
         df_temp['url'] = track_url
+        df_temp['popularity'] = popularity
         #Artists
         song = sp.track(track_url)
         artists = song['artists']
@@ -152,8 +159,16 @@ def find_all_tracks_features(album, artist_NAME):
     df_tracks = df_tracks.loc[~(df_tracks['track'].str.contains('Radio Edit', case=False, regex=False, na=False))]
     # drop same track in different album
     df_tracks = df_tracks.drop_duplicates(subset=['track'], keep='last')
+    df_tracks['release date'] = pd.to_datetime(df_tracks['release date'], infer_datetime_format=True)
+    # Normalize BPM
+    df_tracks['release date_year'] = df_tracks['release date'].dt.year
     
     return df_tracks
 
 
-   
+def groupby_df(df):
+    df_group = df.groupby(['release date_year']).agg({**{col: ['mean'] for col in ['acousticness', 'danceability', 'energy', 'speechiness', 'valence', 'BPM', 'popularity']}, **{'track': ['size']}})
+    df_group.columns = ['_'.join(multi_index) for multi_index in df_group.columns.ravel()]
+    df_group = df_group.reset_index()
+    df_group = df_group.rename(columns={'release date_year': 'release date', 'BPM_mean':'BPM','acousticness_mean': 'acousticness', 'danceability_mean': 'danceability', 'energy_mean': 'energy', 'speechiness_mean': 'speechiness', 'valence_mean': 'valence','popularity_mean':'popularity','track_size':'Number of Tracks'})
+    return df_group

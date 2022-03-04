@@ -27,7 +27,7 @@ st.title("Spotify Streaming")
 
 # Add all your application here
 app.add_page("Main Page", welcome.app)
-app.add_page("Explore Your Saved Library", saved_library.app)
+app.add_page("Explore Your Streaming History", saved_library.app)
 app.add_page("Find Your Top Artists", artists_main.app)
 app.add_page("Recently Played", recently_played.app)
 

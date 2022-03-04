@@ -53,7 +53,7 @@ def display_user_pic():
         f.write(requests.get(pic_url).content)
     return pic_url
 
-@st.cache(suppress_st_warning=True)
+@st.cache(suppress_st_warning=True, allow_output_mutation=True)
 def get_saved_library():
     
     df_saved_tracks = pd.DataFrame()
@@ -89,6 +89,12 @@ def get_saved_library():
             for artist in artists:
                 artists_name += artist['name']  + ','
             artist_list.append(artists_name[:-1])
+            
+        track_features = sp.audio_features(track_list[:-1])
+        df_temp = pd.DataFrame(track_features)
+        df_temp = df_temp[['acousticness', 'danceability', 'energy', 'speechiness', 'valence', 'tempo']]
+        df_temp = df_temp.rename(columns={'tempo': 'BPM'})
+        df_saved_tracks = df_saved_tracks.append(df_temp)
         track_list = ''
         if songs['next'] == None:
             # no more songs in playlist
@@ -104,5 +110,7 @@ def get_saved_library():
     df_saved_tracks['popularity'] = popularity_list
     df_saved_tracks['date_added'] = df_saved_tracks['date_added'].apply(lambda x: x.split('T')[0])
     df_saved_tracks['url'] = track_url_list
+    df_saved_tracks['date_added'] = pd.to_datetime(df_saved_tracks['date_added'], infer_datetime_format=True)
+    df_saved_tracks['date_added_year'] = df_saved_tracks['date_added'].dt.year
     
     return df_saved_tracks

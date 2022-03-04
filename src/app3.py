@@ -12,8 +12,21 @@ import requests
 from io import BytesIO
 from IPython.core.display import HTML
 import streamlit.components.v1 as components
+import time
 
 st.text('Your Top Artists')
-
+options = st.multiselect(
+     'What are your favorite colors',
+     ['Green', 'Yellow', 'Red', 'Blue'],
+     ['Yellow', 'Red'])
 
 st.text('love uuu')
+
+import hydralit_components as hc
+
+
+
+# a dedicated single loader 
+with hc.HyLoader('Dont worry data is loading',hc.Loaders.standard_loaders,index=5,primary_color='#1C86EE'):
+    time.sleep(10)
+
