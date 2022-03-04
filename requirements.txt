@@ -9,11 +9,9 @@ loguru
 click
 pandas
 numpy
-textblob
 ipykernel
 scikit-learn
 comet_ml
-torchtext
 spacy
 tqdm
 seaborn
