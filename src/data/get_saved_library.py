@@ -15,15 +15,15 @@ warnings.filterwarnings("ignore")
 with open('../data/raw/spotify_creds.json') as f:
     spotify_creds = json.load(f)
 
-with open('../data/raw/spotify_token.json') as f:
-    spotify_token = json.load(f)
+#with open('../data/raw/spotify_token.json') as f:
+ #   spotify_token = json.load(f)
 
 client_id = spotify_creds['client_id']
 client_secret = spotify_creds['client_secret']
 username = spotify_creds['username']
 scope = spotify_creds['saved_library_scope']
 redirect_uri = spotify_creds['saved_library_redirect_url']
-token = spotify_token['all_access_token']
+#token = spotify_token['all_access_token']
 
 
 def connect_to_spotify_api(client_id, client_secret, username, scope, redirect_uri):
@@ -31,7 +31,7 @@ def connect_to_spotify_api(client_id, client_secret, username, scope, redirect_u
     client_credentials_manager = SpotifyClientCredentials(client_id, client_secret) 
     sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
-    #token = util.prompt_for_user_token(username, scope, client_id, client_secret, redirect_uri)
+    token = util.prompt_for_user_token(username, scope, client_id, client_secret, redirect_uri)
     if token:
         sp = spotipy.Spotify(auth=token)
     else:

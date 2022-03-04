@@ -1,32 +1,29 @@
+import spotipy.oauth2 as oauth2
+from spotipy.oauth2 import SpotifyClientCredentials
+import spotipy.util as util
+import json
+import spotipy
 import streamlit as st
-import numpy as np
-import pandas as pd
-from dis import dis
-import streamlit as st
-from data.get_saved_library import get_saved_library, display_user_name, display_user_pic
-from data.get_recently_played import get_recently_played
-from data.get_top_artists import get_top_artists
-from data.image_url import path_to_image_html
-from PIL import Image
-import requests
-from io import BytesIO
-from IPython.core.display import HTML
-import streamlit.components.v1 as components
-import time
 
-st.text('Your Top Artists')
-options = st.multiselect(
-     'What are your favorite colors',
-     ['Green', 'Yellow', 'Red', 'Blue'],
-     ['Yellow', 'Red'])
+with open('../data/raw/spotify_creds.json') as f:
+    spotify_creds = json.load(f)
 
-st.text('love uuu')
+client_id = spotify_creds['client_id']
+client_secret = spotify_creds['client_secret']
+username = spotify_creds['username']
+scope = spotify_creds['saved_library_scope']
+redirect_uri = spotify_creds['saved_library_redirect_url']
 
-import hydralit_components as hc
+def get_token(scope):
+    
+    client_credentials_manager = SpotifyClientCredentials(client_id, client_secret) 
+    sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+    token = util.prompt_for_user_token(username, scope, client_id, client_secret, redirect_uri)
+    
+    return token
 
+all_token = get_token('user-library-read user-read-recently-played user-top-read')
 
+st.text(all_token)
 
-# a dedicated single loader 
-with hc.HyLoader('Dont worry data is loading',hc.Loaders.standard_loaders,index=5,primary_color='#1C86EE'):
-    time.sleep(10)
 
