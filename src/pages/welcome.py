@@ -19,7 +19,7 @@ def app():
         #pic_url = display_user_pic()
         user_pic = Image.open('../data/raw/user_pic.jpg')
         st.text("Welcome %s !" % (username))
-        st.image(user_pic, width=500, use_container_width='always')
+        st.image(user_pic, width=500, use_column_width='always')
     
     with col2:
         st.text('These Are Your Top 5 Tracks')
