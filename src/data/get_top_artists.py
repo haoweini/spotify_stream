@@ -36,6 +36,7 @@ def get_top_artists():
     popularity_list = []
     artist_url_list = []
     followers_list = []
+    sp = connect_to_spotify_api(client_id, client_secret, username, scope, redirect_uri)
     artists = sp.current_user_top_artists()
     
     for artist in artists['items']:
@@ -68,6 +69,7 @@ def get_top_tracks():
     track_url_list = []
     popularity_list = []
 
+    sp = connect_to_spotify_api(client_id, client_secret, username, scope, redirect_uri)
     songs = sp.current_user_top_tracks(limit=50)
     for song in songs['items']:
         #join track ids to a string for audio_features function
@@ -107,6 +109,7 @@ def get_related_artists(artist_name):
     artist_url_list = []
     followers_list = []
     
+    sp = connect_to_spotify_api(client_id, client_secret, username, scope, redirect_uri)
     artist_id = sp.search(artist_name)
     artist_url = artist_id['tracks']['items'][0]['artists'][0]['external_urls']['spotify']
     artist_url = artist_url.split('/')[-1]
@@ -136,9 +139,11 @@ def get_related_artists(artist_name):
 #####3
 def get_top_artists_tracks_features(artist_name):
     
+    sp = connect_to_spotify_api(client_id, client_secret, username, scope, redirect_uri)
     artist_id = sp.search(q=artist_name, type="artist", limit=10)
     artist_url = artist_id['artists']['items'][0]['external_urls']['spotify']
     artist_url = artist_url.split('/')[-1]
+    
     songs = sp.artist_top_tracks(artist_url)
     
     df_artist_top_tracks = pd.DataFrame()
@@ -184,6 +189,7 @@ def search_random_artist(artist):
     followers = []
     popularity = []
     
+    sp = connect_to_spotify_api(client_id, client_secret, username, scope, redirect_uri)
     artist_id = sp.search(q=artist, type="artist", limit=10)
     artist_url = artist_id['artists']['items'][0]['external_urls']['spotify']
     artist_url = artist_url.split('/')[-1]

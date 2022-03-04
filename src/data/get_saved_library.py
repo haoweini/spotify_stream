@@ -42,11 +42,13 @@ def connect_to_spotify_api(client_id, client_secret, username, scope, redirect_u
 sp = connect_to_spotify_api(client_id, client_secret, username, scope, redirect_uri)
 
 def display_user_name():
+    sp = connect_to_spotify_api(client_id, client_secret, username, scope, redirect_uri)
     user = sp.current_user()
     user_name = user['display_name']
     return user_name
 
 def display_user_pic():
+    sp = connect_to_spotify_api(client_id, client_secret, username, scope, redirect_uri)
     user = sp.current_user()
     pic_url = user['images'][0]['url']
     with open('../data/raw/user_pic.jpg', 'wb') as f:
@@ -68,6 +70,7 @@ def get_saved_library():
     offset_index = 0
 
     while more_songs:
+        sp = connect_to_spotify_api(client_id, client_secret, username, scope, redirect_uri)
         songs = sp.current_user_saved_tracks(offset=offset_index)
         for song in songs['items']:
             #join track ids to a string for audio_features function

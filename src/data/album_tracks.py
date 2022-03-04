@@ -35,6 +35,7 @@ def search_artist_album(artist_NAME):
     album_group = []
     num_tracks = []
 
+    sp = connect_to_spotify_api(client_id, client_secret, username, scope, redirect_uri)
     artist_id = sp.search(q=artist_NAME, type="artist", limit=10)
     artist_url = artist_id['artists']['items'][0]['external_urls']['spotify']
     artist_url = artist_url.split('/')[-1]
@@ -72,6 +73,7 @@ def search_artist_album(artist_NAME):
 
 def find_album_tracks(album_url):
     
+    sp = connect_to_spotify_api(client_id, client_secret, username, scope, redirect_uri)
     album_tracks = sp.album_tracks(album_url)
 
     df_album_tracks = pd.DataFrame()

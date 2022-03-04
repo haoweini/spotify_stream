@@ -38,7 +38,7 @@ def get_recently_played():
     album_cover_list = []
     more_songs = True
 
-
+    sp = connect_to_spotify_api(client_id, client_secret, username, scope, redirect_uri)
     songs = sp.current_user_recently_played(limit=50)
     for song in songs['items']:
         #join track ids to a string for audio_features function

@@ -3,9 +3,8 @@ import numpy as np
 import pandas as pd
 from dis import dis
 import streamlit as st
-from data.get_saved_library import get_saved_library, display_user_name, display_user_pic
-from data.get_top_artists import get_top_artists, get_top_tracks
-from data.image_url import path_to_image_html
+from data.get_saved_library import display_user_name, display_user_pic
+from data.get_top_artists import get_top_tracks
 from PIL import Image
 import requests
 from io import BytesIO
@@ -17,7 +16,7 @@ def app():
     col1, col2 = st.columns(2)
     with col1:
         username = display_user_name()
-        pic_url = display_user_pic()
+        #pic_url = display_user_pic()
         user_pic = Image.open('../data/raw/user_pic.jpg')
         st.text("Welcome %s !" % (username))
         st.image(user_pic, width=500)
