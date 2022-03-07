@@ -1,15 +1,13 @@
-from matplotlib import container
 import streamlit as st
-import numpy as np
-import pandas as pd
 from dis import dis
 import streamlit as st
 from data.get_saved_library import display_user_name, get_all_genre, get_saved_library
 from data.get_top_artists import get_top_tracks
 from PIL import Image
-from IPython.core.display import HTML
 import streamlit.components.v1 as components
 import plotly.express as px
+import hydralit_components as hc
+import time 
 
 # @st.cache
 def app():
@@ -35,30 +33,32 @@ def app():
     with st.container():
         df_saved = get_saved_library()
         # get all artists in saved library
-        df_artist_detailed_genre = get_all_genre(df_saved)
+        with hc.HyLoader("Now Loading Your Top Genres",hc.Loaders.pacman,):
+            
+            df_artist_detailed_genre = get_all_genre(df_saved)
 
-        genre_new = []
-        for i in range(len(df_artist_detailed_genre)):
-            genre = df_artist_detailed_genre.iloc[i]['genre']
-            if 'pop' in genre:
-                genre_new.append('pop')
-            elif 'edm' in genre:
-                genre_new.append('edm')
-            elif 'house' in genre:
-                genre_new.append('house')
-            elif 'big room' in genre:
-                genre_new.append('big room')
-            elif 'trance' in genre:
-                genre_new.append('trance')
-            elif 'elect' in genre:
-                genre_new.append('edm')
-            elif 'rap' in genre:
-                genre_new.append('rap')
-            elif 'dance' in genre:
-                genre_new.append('dance')
-            else:
-                genre_new.append('other')
-                
-        df_artist_detailed_genre['genre_new'] = genre_new
-        fig = px.treemap(df_artist_detailed_genre, path=['genre_new'])
-        st.plotly_chart(fig, width=1500, use_container_width=True)
+            genre_new = []
+            for i in range(len(df_artist_detailed_genre)):
+                genre = df_artist_detailed_genre.iloc[i]['genre']
+                if 'pop' in genre:
+                    genre_new.append('pop')
+                elif 'edm' in genre:
+                    genre_new.append('edm')
+                elif 'house' in genre:
+                    genre_new.append('house')
+                elif 'big room' in genre:
+                    genre_new.append('big room')
+                elif 'trance' in genre:
+                    genre_new.append('trance')
+                elif 'elect' in genre:
+                    genre_new.append('edm')
+                elif 'rap' in genre:
+                    genre_new.append('rap')
+                elif 'dance' in genre:
+                    genre_new.append('dance')
+                else:
+                    genre_new.append('other')
+                    
+            df_artist_detailed_genre['genre_new'] = genre_new
+            fig = px.treemap(df_artist_detailed_genre, path=['genre_new'])
+            st.plotly_chart(fig, width=1500, use_container_width=True)
