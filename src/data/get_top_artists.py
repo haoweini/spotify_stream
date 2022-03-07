@@ -109,6 +109,7 @@ def get_related_artists(artist_name):
     artist_url_list = []
     followers_list = []
     
+    
     sp = connect_to_spotify_api(client_id, client_secret, username, scope, redirect_uri)
     artist_id = sp.search(artist_name)
     artist_url = artist_id['tracks']['items'][0]['artists'][0]['external_urls']['spotify']
