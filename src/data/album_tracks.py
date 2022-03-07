@@ -103,6 +103,7 @@ def find_album_tracks(album_url):
 
 @st.cache(suppress_st_warning=True, allow_output_mutation=True)
 def find_all_tracks_features(album, artist_NAME):
+    sp = connect_to_spotify_api(client_id, client_secret, username, scope, redirect_uri)
     df_all_tracks = []
 
     for i in range(len(album)):
